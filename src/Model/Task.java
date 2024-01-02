@@ -8,10 +8,6 @@ public class Task {
     private String description;
     private LocalDate dateOfCompletion;
 
-
-    public Task(String name){
-        this.name = name;
-    }
     public String getName() {
         return name;
     }

@@ -4,9 +4,7 @@ import java.time.LocalDate;
 
 public class TaskWithDeadline extends Task{
     private LocalDate deadline;
-    public TaskWithDeadline(String name, LocalDate deadline) {
-        super(name);
-        setDeadline(deadline);
+    public TaskWithDeadline() {
     }
     public LocalDate getDeadline() {
         return deadline;
