@@ -1,2 +1,5 @@
-package Controller.mediator;public interface Mediator {
+package Controller.mediator;
+
+public interface Mediator {
+    void logEvent(String message);
 }

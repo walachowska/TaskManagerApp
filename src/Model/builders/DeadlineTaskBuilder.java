@@ -1,6 +1,6 @@
-package builders;
+package Model.builders;
 
-import Model.TaskWithDeadline;
+import Model.tasks.TaskWithDeadline;
 import java.time.LocalDate;
 
 public class DeadlineTaskBuilder implements Builder{
@@ -18,12 +18,6 @@ public class DeadlineTaskBuilder implements Builder{
     @Override
     public DeadlineTaskBuilder setDescription(String description) {
         this.task.setDescription(deadlineHashtag + "\n" + description);
-        return this;
-    }
-
-    @Override
-    public DeadlineTaskBuilder setDateOfCompletion(LocalDate dateOfCompletion) {
-        this.task.setDateOfCompletion(dateOfCompletion);
         return this;
     }
 

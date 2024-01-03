@@ -1,6 +1,6 @@
-package builders;
+package Model.builders;
 
-import Model.TaskWithCheckList;
+import Model.tasks.TaskWithCheckList;
 import java.time.LocalDate;
 
 public class CheckListTaskBuilder implements Builder{
@@ -19,12 +19,6 @@ public class CheckListTaskBuilder implements Builder{
     @Override
     public Builder setDescription(String description) {
         this.task.setDescription(checklistHashtag + "\n" + description);
-        return this;
-    }
-
-    @Override
-    public Builder setDateOfCompletion(LocalDate dateOfCompletion) {
-        this.task.setDateOfCompletion(dateOfCompletion);
         return this;
     }
 

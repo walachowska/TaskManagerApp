@@ -1,11 +1,14 @@
-package Model;
+package Model.tasks;
+
+import Controller.mediator.Mediator;
+import Model.memento.DeadlineTaskMemento;
+import Model.memento.TaskMemento;
 
 import java.time.LocalDate;
 
 public class TaskWithDeadline extends Task{
     private LocalDate deadline;
-    public TaskWithDeadline() {
-    }
+    private Mediator mediator;
     public LocalDate getDeadline() {
         return deadline;
     }
@@ -15,6 +18,29 @@ public class TaskWithDeadline extends Task{
             System.out.println("The deadline should be a future date. Please insert correct date.");
         }
         this.deadline = deadline;
+    }
+    public void setMediator(Mediator mediator){
+        this.mediator=mediator;
+    }
+
+    public void markAsCompleted() {
+        if (mediator != null) {
+            this.setDateOfCompletion(LocalDate.now());
+            mediator.logEvent("Task: " + this.getName() + " completed on " + this.getDateOfCompletion() +
+                    " with deadline: " + this.deadline);
+        }
+    }
+
+    public DeadlineTaskMemento saveMemento() {
+        return new DeadlineTaskMemento(getName(), getDescription(), getDateOfCompletion(), deadline);
+    }
+
+    public void restoreFromMemento(DeadlineTaskMemento memento) {
+        this.setName(memento.getName());
+        this.setDescription(memento.getDescription());
+        this.setDateOfCompletion(memento.getDateOfCompletion());
+        this.deadline = memento.getDeadline();
+
     }
 }
 

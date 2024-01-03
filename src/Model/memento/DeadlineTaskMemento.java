@@ -1,13 +1,16 @@
 package Model.memento;
 
-public class TaskMemento {
-    private final String state;
+import java.time.LocalDate;
 
-    public TaskMemento(String state) {
-        this.state = state;
+public class DeadlineTaskMemento extends TaskMemento {
+    private final LocalDate deadline;
+
+    public DeadlineTaskMemento(String name, String description, LocalDate dateOfCompletion, LocalDate deadline) {
+        super(name, description, dateOfCompletion);
+        this.deadline = deadline;
     }
 
-    public String getState() {
-        return state;
+    public LocalDate getDeadline() {
+        return this.deadline;
     }
 }

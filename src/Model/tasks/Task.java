@@ -1,4 +1,6 @@
-package Model;
+package Model.tasks;
+
+import Model.memento.TaskMemento;
 
 import java.time.LocalDate;
 import java.util.Date;

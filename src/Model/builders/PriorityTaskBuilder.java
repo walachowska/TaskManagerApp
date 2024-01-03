@@ -1,15 +1,15 @@
-package builders;
+package Model.builders;
 
-import Model.Priority;
-import Model.TaskWithPriotity;
+import Model.tasks.Priority;
+import Model.tasks.TaskWithPriority;
 import java.time.LocalDate;
 
 public class PriorityTaskBuilder implements Builder {
-    private TaskWithPriotity task;
+    private TaskWithPriority task;
     private static final String priorityHashtag = "task with priority";
 
     public PriorityTaskBuilder(){
-        this.task = new TaskWithPriotity();
+        this.task = new TaskWithPriority();
     }
     @Override
     public Builder setName(String name) {
@@ -23,12 +23,6 @@ public class PriorityTaskBuilder implements Builder {
         return this;
     }
 
-    @Override
-    public Builder setDateOfCompletion(LocalDate dateOfCompletion) {
-        this.task.setDateOfCompletion(dateOfCompletion);
-        return this;
-    }
-
     public Builder setPriority(Priority priority){
         this.task.setPriority(priority);
         return this;
@@ -36,10 +30,10 @@ public class PriorityTaskBuilder implements Builder {
 
     @Override
     public void resetTask() {
-        this.task = new TaskWithPriotity();
+        this.task = new TaskWithPriority();
     }
 
-    public TaskWithPriotity getResult(){
+    public TaskWithPriority getResult(){
         return this.task;
     }
 }
