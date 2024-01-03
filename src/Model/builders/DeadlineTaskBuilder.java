@@ -7,9 +7,6 @@ public class DeadlineTaskBuilder implements Builder{
     private TaskWithDeadline task;
     private static final String deadlineHashtag = "task with deadline";
 
-    public DeadlineTaskBuilder(){
-        this.task = new TaskWithDeadline();
-    }
     public DeadlineTaskBuilder setName(String name) {
         this.task.setName(name);
         return this;
@@ -26,9 +23,9 @@ public class DeadlineTaskBuilder implements Builder{
         return this;
     }
 
-    @Override
-    public void resetTask(){
+    public DeadlineTaskBuilder resetTask(){
         this.task = new TaskWithDeadline();
+        return this;
     }
 
     public TaskWithDeadline getResult(){

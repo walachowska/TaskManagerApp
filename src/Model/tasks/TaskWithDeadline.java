@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class TaskWithDeadline extends Task{
     private LocalDate deadline;
     private Mediator mediator;
+    private DeadlineTaskMemento memento;
     public LocalDate getDeadline() {
         return deadline;
     }
@@ -31,11 +32,11 @@ public class TaskWithDeadline extends Task{
         }
     }
 
-    public DeadlineTaskMemento saveMemento() {
-        return new DeadlineTaskMemento(getName(), getDescription(), getDateOfCompletion(), deadline);
+    public void saveMemento() {
+        memento = new DeadlineTaskMemento(getName(), getDescription(), getDateOfCompletion(), deadline);
     }
 
-    public void restoreFromMemento(DeadlineTaskMemento memento) {
+    public void restoreFromMemento() {
         this.setName(memento.getName());
         this.setDescription(memento.getDescription());
         this.setDateOfCompletion(memento.getDateOfCompletion());

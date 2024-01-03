@@ -11,6 +11,7 @@ import java.util.List;
 public class TaskWithCheckList extends Task{
     private List<String> checkList;
     private Mediator mediator;
+    private CheckListTaskMemento memento;
     public TaskWithCheckList() {
         this.checkList = new ArrayList<>();
     }
@@ -26,18 +27,14 @@ public class TaskWithCheckList extends Task{
         }
     }
 
-    public void addSubTask(String subTask){
-        checkList.add(subTask);
+    public void setCheckList(ArrayList<String> subtasks){
+        this.checkList= subtasks;
     }
-    public void removeSubtask(String subTask){
-        checkList.remove(subTask);
-    }
-
-    public CheckListTaskMemento saveMemento() {
-        return new CheckListTaskMemento(getName(), getDescription(), getDateOfCompletion(), checkList);
+    public void saveMemento() {
+        memento = new CheckListTaskMemento(getName(), getDescription(), getDateOfCompletion(), checkList);
     }
 
-    public void restoreFromMemento(CheckListTaskMemento memento) {
+    public void restoreFromMemento() {
         this.setName(memento.getName());
         this.setDescription(memento.getDescription());
         this.setDateOfCompletion(memento.getDateOfCompletion());

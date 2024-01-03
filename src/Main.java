@@ -1,23 +1,26 @@
 import Controller.Logger;
 import Controller.mediator.Mediator;
-import Controller.mediator.TaskMediator;
+import Controller.mediator.LogMediator;
 import Model.builders.DeadlineTaskBuilder;
 import Model.tasks.TaskWithDeadline;
+import View.TaskManagerGUI;
 
 import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
         Logger logger = new Logger("historyOfTasks.txt");
-        Mediator mediator = new TaskMediator(logger);
+        Mediator mediator = new LogMediator(logger);
 
-        DeadlineTaskBuilder deadlineBuilder = new DeadlineTaskBuilder();
+        /*DeadlineTaskBuilder deadlineBuilder = new DeadlineTaskBuilder();
         TaskWithDeadline deadlineTask = deadlineBuilder.setName("Zadanie 1")
                 .setDescription("pierwsze zadanie moje")
                 .setDeadline(LocalDate.parse("2023-01-15"))
                 .getResult();
         deadlineTask.setMediator(mediator);
-        deadlineTask.markAsCompleted();
+        deadlineTask.markAsCompleted();*/
+
+        new TaskManagerGUI(mediator);
     }
 
 }

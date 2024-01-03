@@ -3,10 +3,10 @@ package Controller.mediator;
 
 import Controller.Logger;
 
-public class TaskMediator implements Mediator{
+public class LogMediator implements Mediator{
     private Logger logger;
 
-    public TaskMediator(Logger logger){
+    public LogMediator(Logger logger){
         this.logger = logger;
     }
     @Override

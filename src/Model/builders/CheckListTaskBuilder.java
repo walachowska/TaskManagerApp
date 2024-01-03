@@ -2,39 +2,32 @@ package Model.builders;
 
 import Model.tasks.TaskWithCheckList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class CheckListTaskBuilder implements Builder{
     private TaskWithCheckList task;
     private static final String checklistHashtag = "task with checklist";
 
-    public CheckListTaskBuilder(){
-        this.task = new TaskWithCheckList();
-    }
     @Override
-    public Builder setName(String name) {
+    public CheckListTaskBuilder setName(String name) {
         this.task.setName(name);
         return this;
     }
 
     @Override
-    public Builder setDescription(String description) {
+    public CheckListTaskBuilder setDescription(String description) {
         this.task.setDescription(checklistHashtag + "\n" + description);
         return this;
     }
 
-    public Builder addSubtask(String subTask){
-        this.task.addSubTask(subTask);
+    public CheckListTaskBuilder setChecklist(ArrayList<String> subtasks){
+        this.task.setCheckList(subtasks);
         return this;
     }
 
-    public Builder removeSubtask(String subTask){
-        this.task.removeSubtask(subTask);
-        return this;
-    }
-
-    @Override
-    public void resetTask() {
+    public CheckListTaskBuilder resetTask() {
         this.task = new TaskWithCheckList();
+        return this;
     }
 
     public TaskWithCheckList getResult(){

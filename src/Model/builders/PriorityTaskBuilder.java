@@ -8,29 +8,26 @@ public class PriorityTaskBuilder implements Builder {
     private TaskWithPriority task;
     private static final String priorityHashtag = "task with priority";
 
-    public PriorityTaskBuilder(){
-        this.task = new TaskWithPriority();
-    }
     @Override
-    public Builder setName(String name) {
+    public PriorityTaskBuilder setName(String name) {
         this.task.setName(name);
         return this;
     }
 
     @Override
-    public Builder setDescription(String description) {
+    public PriorityTaskBuilder setDescription(String description) {
         this.task.setDescription(priorityHashtag + "\n" + description);
         return this;
     }
 
-    public Builder setPriority(Priority priority){
+    public PriorityTaskBuilder setPriority(Priority priority){
         this.task.setPriority(priority);
         return this;
     }
 
-    @Override
-    public void resetTask() {
+    public PriorityTaskBuilder resetTask() {
         this.task = new TaskWithPriority();
+        return this;
     }
 
     public TaskWithPriority getResult(){

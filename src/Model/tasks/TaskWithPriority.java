@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class TaskWithPriority extends Task{
     private Priority priority;
     private Mediator mediator;
+    private PriorityTaskMemento memento;
 
     public void setPriority(Priority priority) {
         this.priority = priority;
@@ -28,15 +29,14 @@ public class TaskWithPriority extends Task{
         }
     }
 
-    public PriorityTaskMemento saveMemento() {
-        return new PriorityTaskMemento(getName(), getDescription(), getDateOfCompletion(), priority);
+    public void saveMemento() {
+        memento = new PriorityTaskMemento(getName(), getDescription(), getDateOfCompletion(), priority);
     }
 
-    public void restoreFromMemento(PriorityTaskMemento memento) {
+    public void restoreFromMemento() {
         this.setName(memento.getName());
         this.setDescription(memento.getDescription());
         this.setDateOfCompletion(memento.getDateOfCompletion());
         this.priority = memento.getPriority();
-
     }
 }
