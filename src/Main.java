@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        Logger logger = new Logger("historyOfTasks.txt");
+        Logger logger = new Logger("completedTasks.txt");
         Mediator mediator = new LogMediator(logger);
 
         /*DeadlineTaskBuilder deadlineBuilder = new DeadlineTaskBuilder();

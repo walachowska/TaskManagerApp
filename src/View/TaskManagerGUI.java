@@ -10,28 +10,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
+import java.util.List;
 
 public class TaskManagerGUI {
     private JFrame frame;
     private JPanel menuPanel;
     private JPanel headerPanel;
     private Mediator mediator;
-    private ArrayList<TaskWithDeadline> deadlineTaskList;
-    private ArrayList<TaskWithPriority> priorityTaskList;
-    private ArrayList<TaskWithCheckList> checklistTaskList;
+    private Map<UUID, TaskWithDeadline> deadlineTaskMap;
+    private Map<UUID, TaskWithPriority> priorityTaskMap;
+    private Map<UUID, TaskWithCheckList> checklistTaskMap;
     private DeadlineTaskBuilder deadlineTaskBuilder;
     private PriorityTaskBuilder priorityTaskBuilder;
     private CheckListTaskBuilder checkListTaskBuilder;
 
     public TaskManagerGUI(Mediator mediator) {
         this.mediator = mediator;
-        deadlineTaskList = new ArrayList<>();
-        priorityTaskList = new ArrayList<>();
-        checklistTaskList = new ArrayList<>();
+        deadlineTaskMap = new HashMap<>();
+        priorityTaskMap = new HashMap<>();
+        checklistTaskMap = new HashMap<>();
         deadlineTaskBuilder = new DeadlineTaskBuilder();
         priorityTaskBuilder = new PriorityTaskBuilder();
         checkListTaskBuilder = new CheckListTaskBuilder();
@@ -39,7 +42,7 @@ public class TaskManagerGUI {
     }
     private void initialize() {
         frame = new JFrame("Task Manager");
-        frame.setSize(400, 300);
+        frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(createMenuPanel());
         frame.setVisible(true);
@@ -58,34 +61,43 @@ public class TaskManagerGUI {
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(10, 0, 0, 0);
 
         JButton addTaskButton = new JButton("Add Task");
+        addTaskButton.setPreferredSize(new Dimension(200, 50));
         addTaskButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 recreateFrame(createNewButtonPanel());
             }
         });
+        //2. Wyświetlanie wszystkich zadań
         JButton showTasksButton = new JButton("Show Tasks");
+        showTasksButton.setPreferredSize(new Dimension(200, 50));
         showTasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                recreateFrame(displayTasks());
             }
         });
-        JButton showHistoryButton = new JButton("Show History");
-
+        JButton showCompletedTasks = new JButton("Show Completed Tasks");
+        showCompletedTasks.setPreferredSize(new Dimension(200, 50));
+        showCompletedTasks.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                recreateFrame(displayCompletedTasks());
+            }
+        });
         buttonPanel.add(addTaskButton, gbc);
         buttonPanel.add(showTasksButton, gbc);
-        buttonPanel.add(showHistoryButton, gbc);
+        buttonPanel.add(showCompletedTasks, gbc);
 
         menuPanel.add(headerPanel, BorderLayout.NORTH);
         menuPanel.add(buttonPanel, BorderLayout.CENTER);
 
 
-        //2. Wyświetlanie wszystkich zadań
+
         //JButton completeTaskButton = new JButton("Complete Task");
         //3. Wyświetlanie historii
 
@@ -96,6 +108,13 @@ public class TaskManagerGUI {
         frame.add(panel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    private void addTaskToMap(DefaultListModel<String> model, List<? extends Task> tasks) {
+        for (Task task : tasks) {
+
+            model.addElement(task.getName() + " (" + task.getId() + ")");
+        }
     }
     private JPanel createNewButtonPanel(){
         JPanel panel = new JPanel(new GridBagLayout());
@@ -130,9 +149,13 @@ public class TaskManagerGUI {
                 recreateFrame(createNewChecklistTaskPanel());
             }
         });
+        JButton returnButton = new JButton("Return");
+        returnButton.addActionListener(e -> recreateFrame(menuPanel));
+
         panel.add(deadlineTaskButton, gbc);
         panel.add(priorityTaskButton, gbc);
         panel.add(checklistTaskButton, gbc);
+        panel.add(returnButton, gbc);
 
         return panel;
     }
@@ -179,7 +202,7 @@ public class TaskManagerGUI {
                         .setDescription(description)
                         .setDeadline(deadline)
                         .getResult();
-                deadlineTaskList.add(task);
+                deadlineTaskMap.put(task.getId(), task);
                 recreateFrame(menuPanel);
             }
         });
@@ -225,7 +248,7 @@ public class TaskManagerGUI {
                         .setDescription(description)
                         .setPriority(priority)
                         .getResult();
-                priorityTaskList.add(task);
+                priorityTaskMap.put(task.getId(), task);
                 recreateFrame(menuPanel);
             }
         });
@@ -285,7 +308,7 @@ public class TaskManagerGUI {
                     .setDescription(description)
                     .setChecklist(subtasks)
                     .getResult();
-            checklistTaskList.add(task);
+            checklistTaskMap.put(task.getId(), task);
             recreateFrame(menuPanel);
         });
         panel.add(instructionPanel, BorderLayout.NORTH);
@@ -294,7 +317,80 @@ public class TaskManagerGUI {
         return panel;
     }
 
+    private JPanel displayTasks(){
+        JPanel panel = new JPanel(new BorderLayout());
+        JTabbedPane tabbedPane = new JTabbedPane();
 
+        JList<String> deadlineList = new JList<>(createListModel(deadlineTaskMap));
+        tabbedPane.addTab("Deadline Tasks", new JScrollPane(deadlineList));
+
+        JList<String> priorityList = new JList<>(createListModel(priorityTaskMap));
+        tabbedPane.addTab("Priority Tasks", new JScrollPane(priorityList));
+
+        JList<String> checklistList = new JList<>(createListModel(checklistTaskMap));
+        tabbedPane.addTab("Checklist Tasks", new JScrollPane(checklistList));
+        // selectionListenery
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton saveCopyButton = new JButton("Save Copy");
+        JButton restoreCopyButton = new JButton("Restore Copy");
+        JButton completeButton = new JButton("Mark as complete");
+        JButton returnButton = new JButton("Return");
+        returnButton.addActionListener(e -> recreateFrame(menuPanel));
+        buttonPanel.add(saveCopyButton);
+        buttonPanel.add(restoreCopyButton);
+        buttonPanel.add(completeButton);
+        buttonPanel.add(returnButton);
+        panel.add(tabbedPane, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private DefaultListModel<String> createListModel(Map<UUID, ? extends Task> tasks) {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (Task task : tasks.values()) {
+            model.addElement(task.getName() + " (" + task.getId() + ")");
+        }
+        return model;
+    }
+
+    private JPanel displayCompletedTasks(){
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel headerPanel = new JPanel();
+        JLabel title = new JLabel("Completed Tasks");
+        title.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
+        headerPanel.add(title);
+        panel.add(headerPanel, BorderLayout.NORTH);
+
+        JTextArea completedTaskArea = new JTextArea(15, 30);
+        completedTaskArea.setText(readCompletedFile());
+        completedTaskArea.setEditable(false);
+        panel.add(completedTaskArea, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton returnButton = new JButton("Return");
+        returnButton.addActionListener(e -> recreateFrame(menuPanel));
+        buttonPanel.add(returnButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        return panel;
+    }
+
+    private String readCompletedFile() {
+        StringBuilder completed = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("completedTasks.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                completed.append(line).append("\n");
+            }
+            reader.close();
+        } catch (IOException e) {
+            return "There was a problem with reading file";
+        }
+        return completed.toString();
+    }
 
 
 }
