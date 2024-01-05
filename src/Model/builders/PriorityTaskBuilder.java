@@ -1,8 +1,8 @@
 package Model.builders;
 
+import Controller.mediator.Mediator;
 import Model.tasks.Priority;
 import Model.tasks.TaskWithPriority;
-import java.time.LocalDate;
 
 public class PriorityTaskBuilder implements Builder {
     private TaskWithPriority task;
@@ -25,7 +25,13 @@ public class PriorityTaskBuilder implements Builder {
         return this;
     }
 
-    public PriorityTaskBuilder resetTask() {
+    @Override
+    public PriorityTaskBuilder setMediator(Mediator mediator) {
+        this.task.setMediator(mediator);
+        return this;
+    }
+
+    public PriorityTaskBuilder newTask() {
         this.task = new TaskWithPriority();
         return this;
     }

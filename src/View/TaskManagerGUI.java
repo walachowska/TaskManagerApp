@@ -197,7 +197,7 @@ public class TaskManagerGUI {
                 } catch (DateTimeParseException ex) {
                     System.out.println("Incorrect date format");
                 }
-                TaskWithDeadline task = deadlineTaskBuilder.resetTask()
+                TaskWithDeadline task = deadlineTaskBuilder.newTask()
                         .setName(name)
                         .setDescription(description)
                         .setDeadline(deadline)
@@ -243,7 +243,7 @@ public class TaskManagerGUI {
                 String name = nameField.getText();
                 String description = descField.getText();
                 Priority priority = (Priority) priorityComboBox.getSelectedItem();
-                TaskWithPriority task = priorityTaskBuilder.resetTask()
+                TaskWithPriority task = priorityTaskBuilder.newTask()
                         .setName(name)
                         .setDescription(description)
                         .setPriority(priority)
@@ -303,7 +303,7 @@ public class TaskManagerGUI {
             String name = nameField.getText();
             String description = descField.getText();
             ArrayList<String> subtasks = Collections.list(checklistModel.elements());;
-            TaskWithCheckList task = checkListTaskBuilder.resetTask()
+            TaskWithCheckList task = checkListTaskBuilder.newTask()
                     .setName(name)
                     .setDescription(description)
                     .setChecklist(subtasks)

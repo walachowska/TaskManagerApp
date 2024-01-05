@@ -1,7 +1,8 @@
 package Model.builders;
 
+import Controller.mediator.Mediator;
 import Model.tasks.TaskWithCheckList;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 
 public class CheckListTaskBuilder implements Builder{
@@ -20,12 +21,18 @@ public class CheckListTaskBuilder implements Builder{
         return this;
     }
 
+    @Override
+    public CheckListTaskBuilder setMediator(Mediator mediator) {
+        this.task.setMediator(mediator);
+        return this;
+    }
+
     public CheckListTaskBuilder setChecklist(ArrayList<String> subtasks){
         this.task.setCheckList(subtasks);
         return this;
     }
 
-    public CheckListTaskBuilder resetTask() {
+    public CheckListTaskBuilder newTask() {
         this.task = new TaskWithCheckList();
         return this;
     }

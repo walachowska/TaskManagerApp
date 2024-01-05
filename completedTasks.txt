@@ -1,1 +1,3 @@
-Task: Zadanie 1 completed on 2024-01-03 with deadline: 2023-01-15
+Task: deadline task completed on 2024-01-05 with deadline: 2023-01-15
+Task: check list task with 2 subtasks completed on 2024-01-05
+Task: priority task with priority  completed on 2024-01-05

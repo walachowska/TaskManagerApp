@@ -1,5 +1,6 @@
 package Model.builders;
 
+import Controller.mediator.Mediator;
 import Model.tasks.TaskWithDeadline;
 import java.time.LocalDate;
 
@@ -23,7 +24,13 @@ public class DeadlineTaskBuilder implements Builder{
         return this;
     }
 
-    public DeadlineTaskBuilder resetTask(){
+    @Override
+    public DeadlineTaskBuilder setMediator(Mediator mediator) {
+        this.task.setMediator(mediator);
+        return this;
+    }
+
+    public DeadlineTaskBuilder newTask(){
         this.task = new TaskWithDeadline();
         return this;
     }
