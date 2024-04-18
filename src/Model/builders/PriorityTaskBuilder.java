@@ -37,6 +37,7 @@ public class PriorityTaskBuilder implements Builder {
     }
 
     public TaskWithPriority getResult(){
+        this.task.saveMemento();
         return this.task;
     }
 }

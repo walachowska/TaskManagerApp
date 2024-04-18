@@ -38,6 +38,7 @@ public class CheckListTaskBuilder implements Builder{
     }
 
     public TaskWithCheckList getResult(){
+        this.task.saveMemento();
         return this.task;
     }
 }

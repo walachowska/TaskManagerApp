@@ -36,6 +36,7 @@ public class DeadlineTaskBuilder implements Builder{
     }
 
     public TaskWithDeadline getResult(){
+        this.task.saveMemento();
         return this.task;
     }
 }
